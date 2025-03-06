@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情绪日记 - 周报</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .date-selector {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 20px;
+            padding: 8px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .date-text {
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .section-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primaryColor);
+        }
+
+        .mood-chart {
+            height: 200px;
+            margin-bottom: 16px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .chart-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 14%;
+        }
+
+        .chart-bar {
+            width: 100%;
+            background-color: var(--morandiBlue);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+
+        .chart-bar::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-bar.happy::before {
+            content: '😊';
+            font-size: 14px;
+        }
+
+        .chart-bar.sad::before {
+            content: '😔';
+            font-size: 14px;
+        }
+
+        .chart-bar.anxious::before {
+            content: '😰';
+            font-size: 14px;
+        }
+
+        .chart-bar.calm::before {
+            content: '😌';
+            font-size: 14px;
+        }
+
+        .chart-label {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--lightTextColor);
+        }
+
+        .chart-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .grid-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .grid-line:nth-child(1) {
+            bottom: 0;
+        }
+
+        .grid-line:nth-child(2) {
+            bottom: 25%;
+        }
+
+        .grid-line:nth-child(3) {
+            bottom: 50%;
+        }
+
+        .grid-line:nth-child(4) {
+            bottom: 75%;
+        }
+
+        .emotion-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .emotion-stat {
+            text-align: center;
+            width: 23%;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--lightTextColor);
+        }
+
+        .highlight-card {
+            background-color: var(--morandiBeige);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .highlight-icon {
+            font-size: 32px;
+            margin-right: 16px;
+        }
+
+        .highlight-text {
+            flex: 1;
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--morandiGreen);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: white;
+        }
+
+        .activity-text {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .activity-desc {
+            font-size: 14px;
+            color: var(--lightTextColor);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content-area">
+            <div class="header">
+                <div class="page-title">周报</div>
+                <div class="date-selector">
+                    <i class="fas fa-chevron-left"></i>
+                    <div class="date-text">3月1日 - 3月7日</div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">情绪趋势</div>
+                <div class="mood-chart">
+                    <div class="chart-grid">
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                    </div>
+
+                    <div class="chart-day">
+                        <div class="chart-bar happy" style="height: 60%;"></div>
+                        <div class="chart-label">周一</div>
+                    </div>
+
+                    <div class="chart-day">
+                        <div class="chart-bar happy" style="height: 75%;"></div>
+                        <div class="chart-label">周二</div>
+                    </div>
+
+                    <div class="chart-day">
+                        <div class="chart-bar anxious" style="height: 40%;"></div>
+                        <div class="chart-label">周三</div>
+                    </div>
+
+                    <div class="chart-day">
+                        <div class="chart-bar sad" style="height: 30%;"></div>
+                        <div class="chart-label">周四</div>
+                    </div>
+
+                    <div class="chart-day">
+                        <div class="chart-bar calm" style="height: 65%;"></div>
+                        <div class="chart-label">周五</div>
+                    </div>
+
+                    <div class="chart-day">
+                        <div class="chart-bar happy" style="height: 85%;"></div>
+                        <div class="chart-label">周六</div>
+                    </div>
+
+                    <div class="chart-day">
+                        <div class="chart-bar calm" style="height: 70%;"></div>
+                        <div class="chart-label">周日</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-card">
+                <div class="highlight-icon">🎯</div>
+                <div class="highlight-text">
+                    <div class="highlight-title">本周总结</div>
+                    <div>整体情绪积极，周中有短暂的焦虑和低落，周末恢复平静和开心。</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">情绪分布</div>
+                <div class="emotion-summary">
+                    <div class="emotion-stat">
+                        <div class="stat-value">42%</div>
+                        <div class="stat-label">开心</div>
+                    </div>
+                    <div class="emotion-stat">
+                        <div class="stat-value">15%</div>
+                        <div class="stat-label">焦虑</div>
+                    </div>
+                    <div class="emotion-stat">
+                        <div class="stat-value">13%</div>
+                        <div class="stat-label">低落</div>
+                    </div>
+                    <div class="emotion-stat">
+                        <div class="stat-value">30%</div>
+                        <div class="stat-label">平静</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">积极影响因素</div>
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="activity-text">
+                        <div class="activity-title">社交活动</div>
+                        <div class="activity-desc">与朋友相处时情绪明显提升</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="activity-text">
+                        <div class="activity-title">工作成就</div>
+                        <div class="activity-desc">完成项目后情绪积极</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="activity-text">
+                        <div class="activity-title">音乐</div>
+                        <div class="activity-desc">听音乐时心情变好</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <div class="tab-bar">
+            <div class="tab-item">
+                <i class="tab-icon fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-microphone"></i>
+                <span>录音</span>
+            </div>
+            <div class="tab-item active">
+                <i class="tab-icon fas fa-chart-line"></i>
+                <span>报告</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

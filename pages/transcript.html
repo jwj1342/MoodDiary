@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情绪日记 - 文字稿</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--morandiGray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transcript-container {
+            margin-bottom: 20px;
+        }
+
+        .transcript-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primaryColor);
+        }
+
+        .transcript-text {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            min-height: 150px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .transcript-text textarea {
+            width: 100%;
+            min-height: 150px;
+            border: none;
+            resize: none;
+            font-family: inherit;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--textColor);
+        }
+
+        .transcript-text textarea:focus {
+            outline: none;
+        }
+
+        .emotion-analysis {
+            background-color: var(--morandiBeige);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .analysis-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primaryColor);
+        }
+
+        .emotion-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .emotion-select {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .emotion-select .emotion-tag {
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+
+        .emotion-select .emotion-tag.selected {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn-secondary {
+            background-color: var(--morandiGray);
+            color: var(--textColor);
+            border: none;
+            border-radius: 20px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .audio-player {
+            background-color: white;
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            margin-right: 16px;
+        }
+
+        .play-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primaryColor);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .player-progress {
+            flex: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: var(--morandiGray);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .progress-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 35%;
+            background-color: var(--primaryColor);
+            border-radius: 2px;
+        }
+
+        .player-time {
+            font-size: 12px;
+            color: var(--lightTextColor);
+            margin-top: 4px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content-area">
+            <div class="header">
+                <div class="page-title">编辑文字稿</div>
+                <div class="close-button">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+
+            <div class="audio-player">
+                <div class="player-controls">
+                    <div class="play-button">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="player-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="player-time">01:23 / 03:45</div>
+                </div>
+            </div>
+
+            <div class="transcript-container">
+                <div class="transcript-title">文字记录</div>
+                <div class="transcript-text">
+                    <textarea
+                        placeholder="今天的工作很顺利，完成了所有的任务，感觉很满足。不过下午开会时有点紧张，担心自己的方案不被接受。好在最后大家都很支持我的想法，这让我感到很开心。晚上和朋友一起吃了晚餐，聊了很多有趣的事情，心情放松了很多。"></textarea>
+                </div>
+            </div>
+
+            <div class="emotion-analysis">
+                <div class="analysis-title">情绪分析</div>
+                <div>DeepSeek 分析出的主要情绪：</div>
+                <div class="emotion-list">
+                    <span class="emotion-tag emotion-happy selected">开心</span>
+                    <span class="emotion-tag emotion-anxious selected">紧张</span>
+                    <span class="emotion-tag emotion-calm selected">满足</span>
+                </div>
+                <div style="margin-top: 10px;">你还感受到了什么？</div>
+                <div class="emotion-select">
+                    <span class="emotion-tag emotion-happy">兴奋</span>
+                    <span class="emotion-tag emotion-sad">失落</span>
+                    <span class="emotion-tag emotion-anxious">焦虑</span>
+                    <span class="emotion-tag emotion-calm">平静</span>
+                    <span class="emotion-tag emotion-happy">感激</span>
+                    <span class="emotion-tag emotion-sad">疲惫</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-secondary">取消</button>
+                <button class="btn-primary">保存</button>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <div class="tab-bar">
+            <div class="tab-item">
+                <i class="tab-icon fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item active">
+                <i class="tab-icon fas fa-microphone"></i>
+                <span>录音</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-chart-line"></i>
+                <span>报告</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

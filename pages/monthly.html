@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情绪日记 - 月报</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .date-selector {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 20px;
+            padding: 8px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .date-text {
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .section-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primaryColor);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--lightTextColor);
+            font-weight: 400;
+        }
+
+        .mood-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 8px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            font-size: 12px;
+            color: var(--lightTextColor);
+        }
+
+        .calendar-cell {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            position: relative;
+        }
+
+        .calendar-cell.empty {
+            background-color: transparent;
+        }
+
+        .calendar-cell.happy {
+            background-color: var(--morandiGreen);
+            color: #2c5530;
+        }
+
+        .calendar-cell.sad {
+            background-color: var(--morandiBlue);
+            color: #1a3e4a;
+        }
+
+        .calendar-cell.anxious {
+            background-color: var(--morandiLavender);
+            color: #3a2e5a;
+        }
+
+        .calendar-cell.calm {
+            background-color: var(--morandiBeige);
+            color: #5a4a33;
+        }
+
+        .calendar-cell.no-record {
+            background-color: var(--morandiGray);
+            color: #4a4a4a;
+            opacity: 0.5;
+        }
+
+        .calendar-date {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            font-size: 10px;
+            opacity: 0.8;
+        }
+
+        .calendar-emoji {
+            font-size: 14px;
+        }
+
+        .pie-chart {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--morandiGreen) 0% 42%,
+                    var(--morandiLavender) 42% 57%,
+                    var(--morandiBlue) 57% 70%,
+                    var(--morandiBeige) 70% 100%);
+            margin: 0 auto 20px;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 6px;
+        }
+
+        .legend-label {
+            font-size: 12px;
+            color: var(--lightTextColor);
+        }
+
+        .legend-happy {
+            background-color: var(--morandiGreen);
+        }
+
+        .legend-anxious {
+            background-color: var(--morandiLavender);
+        }
+
+        .legend-sad {
+            background-color: var(--morandiBlue);
+        }
+
+        .legend-calm {
+            background-color: var(--morandiBeige);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--backgroundColor);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--lightTextColor);
+        }
+
+        .highlight-card {
+            background-color: var(--morandiBeige);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .highlight-icon {
+            font-size: 32px;
+            margin-right: 16px;
+        }
+
+        .highlight-text {
+            flex: 1;
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .word-cloud {
+            height: 150px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .word-item {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: var(--backgroundColor);
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .word-lg {
+            font-size: 18px;
+        }
+
+        .word-md {
+            font-size: 14px;
+        }
+
+        .word-sm {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content-area">
+            <div class="header">
+                <div class="page-title">月报</div>
+                <div class="date-selector">
+                    <i class="fas fa-chevron-left"></i>
+                    <div class="date-text">2025年3月</div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="highlight-card">
+                <div class="highlight-icon">📊</div>
+                <div class="highlight-text">
+                    <div class="highlight-title">本月总结</div>
+                    <div>整体情绪积极，有21天记录了情绪，其中开心情绪占比最高。</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">
+                    <div>情绪日历</div>
+                    <div class="section-subtitle">3月</div>
+                </div>
+
+                <div class="calendar-header">
+                    <div class="calendar-day">一</div>
+                    <div class="calendar-day">二</div>
+                    <div class="calendar-day">三</div>
+                    <div class="calendar-day">四</div>
+                    <div class="calendar-day">五</div>
+                    <div class="calendar-day">六</div>
+                    <div class="calendar-day">日</div>
+                </div>
+
+                <div class="mood-calendar">
+                    <!-- 第一周 -->
+                    <div class="calendar-cell empty"></div>
+                    <div class="calendar-cell empty"></div>
+                    <div class="calendar-cell empty"></div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">1</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">2</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell calm">
+                        <div class="calendar-date">3</div>
+                        <div class="calendar-emoji">😌</div>
+                    </div>
+                    <div class="calendar-cell no-record">
+                        <div class="calendar-date">4</div>
+                    </div>
+
+                    <!-- 第二周 -->
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">5</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">6</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell anxious">
+                        <div class="calendar-date">7</div>
+                        <div class="calendar-emoji">😰</div>
+                    </div>
+                    <div class="calendar-cell sad">
+                        <div class="calendar-date">8</div>
+                        <div class="calendar-emoji">😔</div>
+                    </div>
+                    <div class="calendar-cell calm">
+                        <div class="calendar-date">9</div>
+                        <div class="calendar-emoji">😌</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">10</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell calm">
+                        <div class="calendar-date">11</div>
+                        <div class="calendar-emoji">😌</div>
+                    </div>
+
+                    <!-- 第三周 -->
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">12</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell anxious">
+                        <div class="calendar-date">13</div>
+                        <div class="calendar-emoji">😰</div>
+                    </div>
+                    <div class="calendar-cell anxious">
+                        <div class="calendar-date">14</div>
+                        <div class="calendar-emoji">😰</div>
+                    </div>
+                    <div class="calendar-cell sad">
+                        <div class="calendar-date">15</div>
+                        <div class="calendar-emoji">😔</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">16</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">17</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell no-record">
+                        <div class="calendar-date">18</div>
+                    </div>
+
+                    <!-- 第四周 -->
+                    <div class="calendar-cell calm">
+                        <div class="calendar-date">19</div>
+                        <div class="calendar-emoji">😌</div>
+                    </div>
+                    <div class="calendar-cell calm">
+                        <div class="calendar-date">20</div>
+                        <div class="calendar-emoji">😌</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">21</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">22</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell sad">
+                        <div class="calendar-date">23</div>
+                        <div class="calendar-emoji">😔</div>
+                    </div>
+                    <div class="calendar-cell no-record">
+                        <div class="calendar-date">24</div>
+                    </div>
+                    <div class="calendar-cell no-record">
+                        <div class="calendar-date">25</div>
+                    </div>
+
+                    <!-- 第五周 -->
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">26</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">27</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell calm">
+                        <div class="calendar-date">28</div>
+                        <div class="calendar-emoji">😌</div>
+                    </div>
+                    <div class="calendar-cell calm">
+                        <div class="calendar-date">29</div>
+                        <div class="calendar-emoji">😌</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">30</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell happy">
+                        <div class="calendar-date">31</div>
+                        <div class="calendar-emoji">😊</div>
+                    </div>
+                    <div class="calendar-cell empty"></div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">情绪分布</div>
+
+                <div class="pie-chart"></div>
+
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-happy"></div>
+                        <div class="legend-label">开心 42%</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-anxious"></div>
+                        <div class="legend-label">焦虑 15%</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-sad"></div>
+                        <div class="legend-label">低落 13%</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-calm"></div>
+                        <div class="legend-label">平静 30%</div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">21</div>
+                        <div class="stat-label">记录天数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">42</div>
+                        <div class="stat-label">情绪标签</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">68%</div>
+                        <div class="stat-label">积极情绪</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">32%</div>
+                        <div class="stat-label">消极情绪</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">常用词汇</div>
+
+                <div class="word-cloud">
+                    <div class="word-item word-lg" style="color: var(--morandiGreen);">开心</div>
+                    <div class="word-item word-md" style="color: var(--morandiBlue);">工作</div>
+                    <div class="word-item word-lg" style="color: var(--primaryColor);">朋友</div>
+                    <div class="word-item word-sm" style="color: var(--morandiLavender);">压力</div>
+                    <div class="word-item word-md" style="color: var(--morandiBeige);">放松</div>
+                    <div class="word-item word-sm" style="color: var(--lightTextColor);">项目</div>
+                    <div class="word-item word-lg" style="color: var(--morandiGreen);">满足</div>
+                    <div class="word-item word-md" style="color: var(--morandiPink);">音乐</div>
+                    <div class="word-item word-sm" style="color: var(--morandiBlue);">焦虑</div>
+                    <div class="word-item word-md" style="color: var(--primaryColor);">家人</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <div class="tab-bar">
+            <div class="tab-item">
+                <i class="tab-icon fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-microphone"></i>
+                <span>录音</span>
+            </div>
+            <div class="tab-item active">
+                <i class="tab-icon fas fa-chart-line"></i>
+                <span>报告</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

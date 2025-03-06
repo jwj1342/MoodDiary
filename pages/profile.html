@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情绪日记 - 我的</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--morandiGray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--primaryColor);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-info {
+            color: var(--lightTextColor);
+            font-size: 14px;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--lightTextColor);
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primaryColor);
+        }
+
+        .settings-list {
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: var(--backgroundColor);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: var(--primaryColor);
+        }
+
+        .settings-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .settings-text {
+            font-weight: 500;
+        }
+
+        .settings-right {
+            color: var(--lightTextColor);
+            display: flex;
+            align-items: center;
+        }
+
+        .settings-right i {
+            margin-left: 8px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--morandiGray);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.toggle-slider {
+            background-color: var(--primaryColor);
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .logout-button {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content-area">
+            <div class="header">
+                <div class="page-title">我的</div>
+            </div>
+
+            <div class="profile-section">
+                <div class="avatar">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                        alt="用户头像">
+                    <div class="avatar-edit">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <div class="user-name">小明</div>
+                <div class="user-info">已记录情绪 42 天</div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-value">42</div>
+                    <div class="stat-label">记录天数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">86</div>
+                    <div class="stat-label">情绪标签</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">68%</div>
+                    <div class="stat-label">积极情绪</div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-title">账户设置</div>
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="settings-text">个人信息</div>
+                        </div>
+                        <div class="settings-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="settings-text">隐私设置</div>
+                        </div>
+                        <div class="settings-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="settings-text">通知设置</div>
+                        </div>
+                        <div class="settings-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-title">应用设置</div>
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div class="settings-text">深色模式</div>
+                        </div>
+                        <div class="settings-right">
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <div class="settings-text">语言</div>
+                        </div>
+                        <div class="settings-right">
+                            <div>简体中文</div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="settings-text">数据备份</div>
+                        </div>
+                        <div class="settings-right">
+                            <div>自动</div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="section-title">关于</div>
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="settings-text">关于我们</div>
+                        </div>
+                        <div class="settings-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="settings-text">帮助与反馈</div>
+                        </div>
+                        <div class="settings-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-left">
+                            <div class="settings-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="settings-text">给我们评分</div>
+                        </div>
+                        <div class="settings-right">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="logout-button">退出登录</button>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <div class="tab-bar">
+            <div class="tab-item">
+                <i class="tab-icon fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-microphone"></i>
+                <span>录音</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-chart-line"></i>
+                <span>报告</span>
+            </div>
+            <div class="tab-item active">
+                <i class="tab-icon fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

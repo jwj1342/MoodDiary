@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情绪日记 - 首页</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .greeting {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .date {
+            color: var(--lightTextColor);
+            font-size: 14px;
+        }
+
+        .quick-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .action-button {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            width: 48%;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            color: var(--primaryColor);
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-all {
+            font-size: 14px;
+            color: var(--primaryColor);
+            font-weight: 400;
+        }
+
+        .mood-summary {
+            background-color: var(--morandiBeige);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .mood-icon {
+            font-size: 32px;
+            margin-right: 16px;
+        }
+
+        .mood-text {
+            flex: 1;
+        }
+
+        .mood-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .entry-time {
+            font-size: 12px;
+            color: var(--lightTextColor);
+            margin-top: 8px;
+        }
+
+        .entry-tags {
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-time">9:41</div>
+            <div class="status-icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content-area">
+            <div class="header">
+                <div>
+                    <div class="greeting">你好，小明</div>
+                    <div class="date">2025年3月6日 星期四</div>
+                </div>
+                <div>
+                    <i class="fas fa-bell" style="font-size: 20px; color: var(--lightTextColor);"></i>
+                </div>
+            </div>
+
+            <div class="mood-summary">
+                <div class="mood-icon">😌</div>
+                <div class="mood-text">
+                    <div class="mood-title">今天感觉如何？</div>
+                    <div>记录你的情绪，开始一天的旅程</div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <div class="action-button">
+                    <div class="action-icon"><i class="fas fa-microphone"></i></div>
+                    <div>语音记录</div>
+                </div>
+                <div class="action-button">
+                    <div class="action-icon"><i class="fas fa-keyboard"></i></div>
+                    <div>文字记录</div>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <div>最近记录</div>
+                <div class="view-all">查看全部</div>
+            </div>
+
+            <div class="card">
+                <div class="entry-time">昨天 19:42</div>
+                <div style="margin-top: 8px;">今天的工作很顺利，完成了所有的任务，感觉很满足。晚上和朋友一起吃了晚餐，聊了很多有趣的事情。</div>
+                <div class="entry-tags">
+                    <span class="emotion-tag emotion-happy">开心</span>
+                    <span class="emotion-tag emotion-calm">满足</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="entry-time">3月5日 10:15</div>
+                <div style="margin-top: 8px;">早上醒来感觉有点焦虑，可能是因为今天有重要的会议。深呼吸几次后感觉好多了，准备迎接挑战。</div>
+                <div class="entry-tags">
+                    <span class="emotion-tag emotion-anxious">焦虑</span>
+                    <span class="emotion-tag emotion-calm">平静</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="entry-time">3月4日 21:30</div>
+                <div style="margin-top: 8px;">今天收到了一个坏消息，感到有些失落。不过晚上看了一部喜剧电影，心情好了一些。明天会更好。</div>
+                <div class="entry-tags">
+                    <span class="emotion-tag emotion-sad">失落</span>
+                    <span class="emotion-tag emotion-happy">希望</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <div class="tab-bar">
+            <div class="tab-item active">
+                <i class="tab-icon fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-microphone"></i>
+                <span>录音</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-chart-line"></i>
+                <span>报告</span>
+            </div>
+            <div class="tab-item">
+                <i class="tab-icon fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
