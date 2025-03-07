@@ -39,6 +39,9 @@
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--primaryColor);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .transcript-text {
@@ -177,6 +180,129 @@
             margin-top: 4px;
             text-align: right;
         }
+
+        .processing-options {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .options-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primaryColor);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .options-toggle {
+            font-size: 14px;
+            color: var(--primaryColor);
+            cursor: pointer;
+        }
+
+        .options-content {
+            display: none;
+        }
+
+        .options-content.show {
+            display: block;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .option-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .option-checkbox {
+            margin-right: 10px;
+        }
+
+        .option-label {
+            font-size: 14px;
+        }
+
+        .option-description {
+            font-size: 12px;
+            color: var(--lightTextColor);
+            margin-top: 4px;
+            margin-left: 24px;
+        }
+
+        .prompt-input {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            margin-top: 8px;
+            margin-bottom: 16px;
+        }
+
+        .generate-button {
+            background-color: var(--primaryColor);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .processing-status {
+            font-size: 14px;
+            color: var(--primaryColor);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .processing-status i {
+            margin-right: 8px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--lightTextColor);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: var(--primaryColor);
+            border-bottom: 2px solid var(--primaryColor);
+        }
     </style>
 </head>
 
@@ -215,11 +341,68 @@
                 </div>
             </div>
 
+            <div class="tabs">
+                <div class="tab active">原始文字</div>
+                <div class="tab">整理文字</div>
+            </div>
+
             <div class="transcript-container">
-                <div class="transcript-title">文字记录</div>
+                <div class="transcript-title">
+                    <div>语音识别文字</div>
+                    <div style="font-size: 12px; color: var(--lightTextColor);">自动保存</div>
+                </div>
                 <div class="transcript-text">
                     <textarea
                         placeholder="今天的工作很顺利，完成了所有的任务，感觉很满足。不过下午开会时有点紧张，担心自己的方案不被接受。好在最后大家都很支持我的想法，这让我感到很开心。晚上和朋友一起吃了晚餐，聊了很多有趣的事情，心情放松了很多。"></textarea>
+                </div>
+            </div>
+
+            <div class="processing-options">
+                <div class="options-title">
+                    <div>文字处理选项</div>
+                    <div class="options-toggle">展开 <i class="fas fa-chevron-down"></i></div>
+                </div>
+
+                <div class="options-content">
+                    <div class="option-item">
+                        <input type="checkbox" id="option-organize" class="option-checkbox">
+                        <label for="option-organize" class="option-label">使用DeepSeek整理文字</label>
+                    </div>
+                    <div class="option-description">
+                        将语音识别的原始文字整理成更流畅的日记格式
+                    </div>
+
+                    <div class="option-item">
+                        <input type="checkbox" id="option-privacy-name" class="option-checkbox">
+                        <label for="option-privacy-name" class="option-label">人名隐私保护</label>
+                    </div>
+                    <div class="option-description">
+                        将人名替换为拼音首字母（例如：张三 → ZS）
+                    </div>
+
+                    <div class="option-item">
+                        <input type="checkbox" id="option-privacy-sensitive" class="option-checkbox">
+                        <label for="option-privacy-sensitive" class="option-label">敏感信息保护</label>
+                    </div>
+                    <div class="option-description">
+                        将敏感信息（如隐私部位、金额等）替换为缩写或符号
+                    </div>
+
+                    <div class="option-item">
+                        <input type="checkbox" id="option-custom-prompt" class="option-checkbox">
+                        <label for="option-custom-prompt" class="option-label">自定义处理指令</label>
+                    </div>
+                    <div class="option-description">
+                        添加自定义指令来处理文字
+                    </div>
+
+                    <input type="text" class="prompt-input" placeholder="例如：将所有情绪词汇加粗显示，将地名用括号标注">
+
+                    <button class="generate-button">生成整理文字</button>
+
+                    <div class="processing-status">
+                        <i class="fas fa-spinner"></i> 正在处理文字...
+                    </div>
                 </div>
             </div>
 
