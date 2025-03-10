@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>情绪日记 - 录音</title>
+    <title>情绪日记 - 记录</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,12 +18,62 @@
             font-weight: 600;
         }
 
-        .record-container {
+        .record-options {
             display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .record-option {
+            width: 48%;
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .record-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--morandiBeige);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+            color: var(--primaryColor);
+        }
+
+        .option-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .option-desc {
+            font-size: 12px;
+            color: var(--lightTextColor);
+            line-height: 1.5;
+        }
+
+        .record-container {
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 60%;
+        }
+
+        .record-container.active {
+            display: flex;
         }
 
         .record-status {
@@ -183,6 +233,96 @@
         .waveform-bar:nth-child(10) {
             animation-delay: 1.0s;
         }
+
+        .text-record-container {
+            display: none;
+            flex-direction: column;
+            height: 60%;
+        }
+
+        .text-record-container.active {
+            display: flex;
+        }
+
+        .text-input {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .text-input textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            resize: none;
+            font-family: inherit;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--textColor);
+        }
+
+        .text-input textarea:focus {
+            outline: none;
+        }
+
+        .emotion-tags {
+            margin-bottom: 20px;
+        }
+
+        .tags-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primaryColor);
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--morandiGray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .recent-records {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-all {
+            font-size: 14px;
+            color: var(--primaryColor);
+            font-weight: 400;
+        }
     </style>
 </head>
 
@@ -200,11 +340,62 @@
 
         <!-- 内容区域 -->
         <div class="content-area">
-            <div class="header">
-                <div class="page-title">语音记录</div>
+            <!-- 选择记录方式界面 -->
+            <div id="record-selection" class="active">
+                <div class="header">
+                    <div class="page-title">记录情绪</div>
+                </div>
+
+                <div class="record-options">
+                    <div class="record-option" id="voice-option">
+                        <div class="option-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="option-title">语音记录</div>
+                        <div class="option-desc">通过语音记录你的情绪和想法，系统将自动转换为文字</div>
+                    </div>
+
+                    <div class="record-option" id="text-option">
+                        <div class="option-icon">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <div class="option-title">文字记录</div>
+                        <div class="option-desc">直接输入文字记录你的情绪和想法</div>
+                    </div>
+                </div>
+
+                <div class="recent-records">
+                    <div class="section-title">
+                        <div>最近记录</div>
+                        <div class="view-all">查看全部</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="entry-time">今天 14:30</div>
+                        <div style="margin-top: 8px;">今天完成了一个重要的项目，感觉很有成就感。虽然过程中遇到了一些困难，但最终还是克服了。</div>
+                        <div class="entry-tags">
+                            <span class="emotion-tag emotion-happy">成就感</span>
+                            <span class="emotion-tag emotion-calm">满足</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="entry-time">昨天 19:42</div>
+                        <div style="margin-top: 8px;">今天的工作很顺利，完成了所有的任务，感觉很满足。晚上和朋友一起吃了晚餐，聊了很多有趣的事情。</div>
+                        <div class="entry-tags">
+                            <span class="emotion-tag emotion-happy">开心</span>
+                            <span class="emotion-tag emotion-calm">满足</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="record-container">
+            <!-- 语音记录界面 -->
+            <div id="voice-record" class="record-container">
+                <div class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+
                 <div class="record-status">点击按钮开始录音</div>
 
                 <div class="record-waveform recording">
@@ -234,11 +425,45 @@
                         <i class="control-icon fas fa-check"></i>
                     </div>
                 </div>
+
+                <div class="record-tips">
+                    <p>说出你今天的感受，我们将自动分析你的情绪状态</p>
+                    <p>录音完成后，你可以编辑文字记录或添加标签</p>
+                </div>
             </div>
 
-            <div class="record-tips">
-                <p>说出你今天的感受，我们将自动分析你的情绪状态</p>
-                <p>录音完成后，你可以编辑文字记录或添加标签</p>
+            <!-- 文字记录界面 -->
+            <div id="text-record" class="text-record-container">
+                <div class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+
+                <div class="header">
+                    <div class="page-title">文字记录</div>
+                </div>
+
+                <div class="text-input">
+                    <textarea placeholder="记录你今天的情绪和想法..."></textarea>
+                </div>
+
+                <div class="emotion-tags">
+                    <div class="tags-title">选择情绪标签</div>
+                    <div class="tags-container">
+                        <span class="emotion-tag emotion-happy">开心</span>
+                        <span class="emotion-tag emotion-sad">难过</span>
+                        <span class="emotion-tag emotion-anxious">焦虑</span>
+                        <span class="emotion-tag emotion-calm">平静</span>
+                        <span class="emotion-tag emotion-happy">兴奋</span>
+                        <span class="emotion-tag emotion-sad">失落</span>
+                        <span class="emotion-tag emotion-anxious">紧张</span>
+                        <span class="emotion-tag emotion-calm">满足</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-secondary">取消</button>
+                    <button class="btn-primary">保存</button>
+                </div>
             </div>
         </div>
 
@@ -249,8 +474,8 @@
                 <span>首页</span>
             </div>
             <div class="tab-item active">
-                <i class="tab-icon fas fa-microphone"></i>
-                <span>录音</span>
+                <i class="tab-icon fas fa-edit"></i>
+                <span>记录</span>
             </div>
             <div class="tab-item">
                 <i class="tab-icon fas fa-chart-line"></i>
@@ -262,6 +487,102 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 这里只是模拟交互，实际开发时需要完善
+        document.getElementById('voice-option').addEventListener('click', function () {
+            document.getElementById('record-selection').classList.remove('active');
+            document.getElementById('voice-record').classList.add('active');
+        });
+
+        document.getElementById('text-option').addEventListener('click', function () {
+            document.getElementById('record-selection').classList.remove('active');
+            document.getElementById('text-record').classList.add('active');
+        });
+
+        const backButtons = document.querySelectorAll('.back-button');
+        backButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                document.getElementById('voice-record').classList.remove('active');
+                document.getElementById('text-record').classList.remove('active');
+                document.getElementById('record-selection').classList.add('active');
+            });
+        });
+
+        // 与父窗口通信的函数
+        let parentWindow = null;
+        let parentOrigin = null;
+
+        // 切换到指定页面
+        function navigateTo(pageName) {
+            if (parentWindow && parentOrigin) {
+                parentWindow.postMessage({
+                    action: 'switchPage',
+                    page: pageName
+                }, parentOrigin);
+            } else {
+                console.error('父窗口通信未初始化');
+            }
+        }
+
+        // 监听来自父窗口的消息
+        window.addEventListener('message', function (event) {
+            const data = event.data;
+
+            if (data.action === 'setupCommunication') {
+                parentWindow = window.parent;
+                parentOrigin = data.parentOrigin;
+                console.log('与父窗口通信已建立');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // 底部导航栏点击事件
+            const tabItems = document.querySelectorAll('.tab-bar .tab-item');
+            tabItems.forEach(function (item, index) {
+                item.addEventListener('click', function () {
+                    switch (index) {
+                        case 0: // 首页
+                            navigateTo('home');
+                            break;
+                        case 1: // 记录
+                            navigateTo('record');
+                            break;
+                        case 2: // 报告
+                            navigateTo('weekly');
+                            break;
+                        case 3: // 我的
+                            navigateTo('profile');
+                            break;
+                    }
+                });
+            });
+
+            // 语音记录完成按钮点击事件
+            const completeButton = document.querySelector('.control-button .fa-check');
+            if (completeButton) {
+                completeButton.parentElement.addEventListener('click', function () {
+                    navigateTo('transcript');
+                });
+            }
+
+            // 文字记录保存按钮点击事件
+            const saveButton = document.querySelector('.btn-primary');
+            if (saveButton) {
+                saveButton.addEventListener('click', function () {
+                    navigateTo('home');
+                });
+            }
+
+            // 卡片点击事件
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(function (card) {
+                card.addEventListener('click', function () {
+                    navigateTo('transcript');
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

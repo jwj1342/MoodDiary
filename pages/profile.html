@@ -233,7 +233,7 @@
             </div>
 
             <div class="profile-section">
-                <div class="avatar">
+                <div class="avatar" id="avatar-container">
                     <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
                         alt="用户头像">
                     <div class="avatar-edit">
@@ -391,8 +391,8 @@
                 <span>首页</span>
             </div>
             <div class="tab-item">
-                <i class="tab-icon fas fa-microphone"></i>
-                <span>录音</span>
+                <i class="tab-icon fas fa-edit"></i>
+                <span>记录</span>
             </div>
             <div class="tab-item">
                 <i class="tab-icon fas fa-chart-line"></i>
@@ -404,6 +404,99 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 与父窗口通信的函数
+        let parentWindow = null;
+        let parentOrigin = null;
+
+        // 切换到指定页面
+        function navigateTo(pageName) {
+            if (parentWindow && parentOrigin) {
+                parentWindow.postMessage({
+                    action: 'switchPage',
+                    page: pageName
+                }, parentOrigin);
+            } else {
+                console.error('父窗口通信未初始化');
+            }
+        }
+
+        // 监听来自父窗口的消息
+        window.addEventListener('message', function (event) {
+            const data = event.data;
+
+            if (data.action === 'setupCommunication') {
+                parentWindow = window.parent;
+                parentOrigin = data.parentOrigin;
+                console.log('与父窗口通信已建立');
+            }
+        });
+
+        // 添加事件监听器
+        document.addEventListener('DOMContentLoaded', function () {
+            // 底部导航栏点击事件
+            const tabItems = document.querySelectorAll('.tab-bar .tab-item');
+            tabItems.forEach(function (item, index) {
+                item.addEventListener('click', function () {
+                    switch (index) {
+                        case 0: // 首页
+                            navigateTo('home');
+                            break;
+                        case 1: // 记录
+                            navigateTo('record');
+                            break;
+                        case 2: // 报告
+                            navigateTo('weekly');
+                            break;
+                        case 3: // 我的
+                            navigateTo('profile');
+                            break;
+                    }
+                });
+            });
+
+            // 设置项点击事件
+            const settingsItems = document.querySelectorAll('.settings-item');
+            settingsItems.forEach(function (item) {
+                item.addEventListener('click', function () {
+                    // 模拟点击设置项
+                    const settingsText = item.querySelector('.settings-text');
+                    if (settingsText) {
+                        alert('您点击了：' + settingsText.textContent);
+                    }
+                });
+            });
+
+            // 退出登录按钮点击事件
+            const logoutButton = document.querySelector('.logout-button');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function () {
+                    navigateTo('login');
+                });
+            }
+
+            // 深色模式切换
+            const darkModeToggle = document.querySelector('.toggle-switch input');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('change', function () {
+                    if (this.checked) {
+                        document.body.classList.add('dark-mode');
+                    } else {
+                        document.body.classList.remove('dark-mode');
+                    }
+                });
+            }
+
+            // 头像点击事件
+            const avatarContainer = document.getElementById('avatar-container');
+            if (avatarContainer) {
+                avatarContainer.addEventListener('click', function () {
+                    navigateTo('login');
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

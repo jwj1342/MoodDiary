@@ -510,8 +510,8 @@
                 <span>首页</span>
             </div>
             <div class="tab-item">
-                <i class="tab-icon fas fa-microphone"></i>
-                <span>录音</span>
+                <i class="tab-icon fas fa-edit"></i>
+                <span>记录</span>
             </div>
             <div class="tab-item active">
                 <i class="tab-icon fas fa-chart-line"></i>
@@ -523,6 +523,103 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 与父窗口通信的函数
+        let parentWindow = null;
+        let parentOrigin = null;
+
+        // 切换到指定页面
+        function navigateTo(pageName) {
+            if (parentWindow && parentOrigin) {
+                parentWindow.postMessage({
+                    action: 'switchPage',
+                    page: pageName
+                }, parentOrigin);
+            } else {
+                console.error('父窗口通信未初始化');
+            }
+        }
+
+        // 监听来自父窗口的消息
+        window.addEventListener('message', function (event) {
+            const data = event.data;
+
+            if (data.action === 'setupCommunication') {
+                parentWindow = window.parent;
+                parentOrigin = data.parentOrigin;
+                console.log('与父窗口通信已建立');
+            }
+        });
+
+        // 添加事件监听器
+        document.addEventListener('DOMContentLoaded', function () {
+            // 日期选择器点击事件
+            const dateSelector = document.querySelector('.date-selector');
+            if (dateSelector) {
+                const prevButton = dateSelector.querySelector('.fa-chevron-left');
+                const nextButton = dateSelector.querySelector('.fa-chevron-right');
+
+                if (prevButton) {
+                    prevButton.parentElement.addEventListener('click', function () {
+                        // 模拟切换到上一月
+                        const dateText = document.querySelector('.date-text');
+                        if (dateText) {
+                            dateText.textContent = '2025年2月';
+                        }
+                    });
+                }
+
+                if (nextButton) {
+                    nextButton.parentElement.addEventListener('click', function () {
+                        // 模拟切换到下一月
+                        const dateText = document.querySelector('.date-text');
+                        if (dateText) {
+                            dateText.textContent = '2025年4月';
+                        }
+                    });
+                }
+            }
+
+            // 底部导航栏点击事件
+            const tabItems = document.querySelectorAll('.tab-bar .tab-item');
+            tabItems.forEach(function (item, index) {
+                item.addEventListener('click', function () {
+                    switch (index) {
+                        case 0: // 首页
+                            navigateTo('home');
+                            break;
+                        case 1: // 记录
+                            navigateTo('record');
+                            break;
+                        case 2: // 报告
+                            navigateTo('weekly');
+                            break;
+                        case 3: // 我的
+                            navigateTo('profile');
+                            break;
+                    }
+                });
+            });
+
+            // 日历单元格点击事件
+            const calendarCells = document.querySelectorAll('.calendar-cell:not(.empty):not(.no-record)');
+            calendarCells.forEach(function (cell) {
+                cell.addEventListener('click', function () {
+                    // 模拟点击日期查看当天记录
+                    navigateTo('transcript');
+                });
+            });
+
+            // 周报切换
+            const highlightCard = document.querySelector('.highlight-card');
+            if (highlightCard) {
+                highlightCard.addEventListener('click', function () {
+                    navigateTo('weekly');
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

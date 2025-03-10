@@ -438,8 +438,8 @@
                 <span>首页</span>
             </div>
             <div class="tab-item active">
-                <i class="tab-icon fas fa-microphone"></i>
-                <span>录音</span>
+                <i class="tab-icon fas fa-edit"></i>
+                <span>记录</span>
             </div>
             <div class="tab-item">
                 <i class="tab-icon fas fa-chart-line"></i>
@@ -451,6 +451,121 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 与父窗口通信的函数
+        let parentWindow = null;
+        let parentOrigin = null;
+
+        // 切换到指定页面
+        function navigateTo(pageName) {
+            if (parentWindow && parentOrigin) {
+                parentWindow.postMessage({
+                    action: 'switchPage',
+                    page: pageName
+                }, parentOrigin);
+            } else {
+                console.error('父窗口通信未初始化');
+            }
+        }
+
+        // 监听来自父窗口的消息
+        window.addEventListener('message', function (event) {
+            const data = event.data;
+
+            if (data.action === 'setupCommunication') {
+                parentWindow = window.parent;
+                parentOrigin = data.parentOrigin;
+                console.log('与父窗口通信已建立');
+            }
+        });
+
+        // 添加事件监听器
+        document.addEventListener('DOMContentLoaded', function () {
+            // 关闭按钮点击事件
+            const closeButton = document.querySelector('.close-button');
+            if (closeButton) {
+                closeButton.addEventListener('click', function () {
+                    navigateTo('record');
+                });
+            }
+
+            // 保存按钮点击事件
+            const saveButton = document.querySelector('.btn-primary');
+            if (saveButton) {
+                saveButton.addEventListener('click', function () {
+                    navigateTo('home');
+                });
+            }
+
+            // 取消按钮点击事件
+            const cancelButton = document.querySelector('.btn-secondary');
+            if (cancelButton) {
+                cancelButton.addEventListener('click', function () {
+                    navigateTo('record');
+                });
+            }
+
+            // 底部导航栏点击事件
+            const tabItems = document.querySelectorAll('.tab-bar .tab-item');
+            tabItems.forEach(function (item, index) {
+                item.addEventListener('click', function () {
+                    switch (index) {
+                        case 0: // 首页
+                            navigateTo('home');
+                            break;
+                        case 1: // 记录
+                            navigateTo('record');
+                            break;
+                        case 2: // 报告
+                            navigateTo('weekly');
+                            break;
+                        case 3: // 我的
+                            navigateTo('profile');
+                            break;
+                    }
+                });
+            });
+
+            // 选项展开/收起
+            const optionsToggle = document.querySelector('.options-toggle');
+            const optionsContent = document.querySelector('.options-content');
+            if (optionsToggle && optionsContent) {
+                optionsToggle.addEventListener('click', function () {
+                    optionsContent.classList.toggle('show');
+                    const icon = optionsToggle.querySelector('i');
+                    if (icon) {
+                        if (optionsContent.classList.contains('show')) {
+                            icon.className = 'fas fa-chevron-up';
+                            optionsToggle.textContent = '收起 ';
+                            optionsToggle.appendChild(icon);
+                        } else {
+                            icon.className = 'fas fa-chevron-down';
+                            optionsToggle.textContent = '展开 ';
+                            optionsToggle.appendChild(icon);
+                        }
+                    }
+                });
+            }
+
+            // 标签点击事件
+            const emotionTags = document.querySelectorAll('.emotion-select .emotion-tag');
+            emotionTags.forEach(function (tag) {
+                tag.addEventListener('click', function () {
+                    tag.classList.toggle('selected');
+                });
+            });
+
+            // 标签页切换
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(function (tab, index) {
+                tab.addEventListener('click', function () {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

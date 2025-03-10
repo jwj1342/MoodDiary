@@ -25,42 +25,6 @@
             font-size: 14px;
         }
 
-        .quick-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-
-        .action-button {
-            background-color: white;
-            border-radius: 16px;
-            padding: 16px;
-            width: 48%;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .action-icon {
-            font-size: 24px;
-            color: var(--primaryColor);
-            margin-bottom: 8px;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .view-all {
-            font-size: 14px;
-            color: var(--primaryColor);
-            font-weight: 400;
-        }
-
         .mood-summary {
             background-color: var(--morandiBeige);
             border-radius: 16px;
@@ -84,6 +48,21 @@
             margin-bottom: 4px;
         }
 
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-all {
+            font-size: 14px;
+            color: var(--primaryColor);
+            font-weight: 400;
+        }
+
         .entry-time {
             font-size: 12px;
             color: var(--lightTextColor);
@@ -92,6 +71,123 @@
 
         .entry-tags {
             margin-top: 8px;
+        }
+
+        .insights-container {
+            margin-bottom: 24px;
+        }
+
+        .insight-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .insight-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background-color: var(--morandiGreen);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .insight-content {
+            flex: 1;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .insight-desc {
+            font-size: 14px;
+            color: var(--lightTextColor);
+        }
+
+        .streak-container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .streak-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .streak-title {
+            font-weight: 600;
+        }
+
+        .streak-count {
+            font-size: 14px;
+            color: var(--primaryColor);
+            font-weight: 600;
+        }
+
+        .streak-days {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .streak-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .day-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--morandiGray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--textColor);
+        }
+
+        .day-circle.active {
+            background-color: var(--primaryColor);
+            color: white;
+        }
+
+        .day-label {
+            font-size: 12px;
+            color: var(--lightTextColor);
+        }
+
+        .record-button {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primaryColor);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 24px;
+            z-index: 100;
         }
     </style>
 </head>
@@ -123,19 +219,71 @@
             <div class="mood-summary">
                 <div class="mood-icon">😌</div>
                 <div class="mood-text">
-                    <div class="mood-title">今天感觉如何？</div>
-                    <div>记录你的情绪，开始一天的旅程</div>
+                    <div class="mood-title">本周情绪总结</div>
+                    <div>整体情绪积极，有短暂的焦虑和低落，周末恢复平静和开心</div>
                 </div>
             </div>
 
-            <div class="quick-actions">
-                <div class="action-button">
-                    <div class="action-icon"><i class="fas fa-microphone"></i></div>
-                    <div>语音记录</div>
+            <div class="streak-container">
+                <div class="streak-header">
+                    <div class="streak-title">记录连续天数</div>
+                    <div class="streak-count">已连续记录 7 天</div>
                 </div>
-                <div class="action-button">
-                    <div class="action-icon"><i class="fas fa-keyboard"></i></div>
-                    <div>文字记录</div>
+                <div class="streak-days">
+                    <div class="streak-day">
+                        <div class="day-circle active">一</div>
+                        <div class="day-label">3/1</div>
+                    </div>
+                    <div class="streak-day">
+                        <div class="day-circle active">二</div>
+                        <div class="day-label">3/2</div>
+                    </div>
+                    <div class="streak-day">
+                        <div class="day-circle active">三</div>
+                        <div class="day-label">3/3</div>
+                    </div>
+                    <div class="streak-day">
+                        <div class="day-circle active">四</div>
+                        <div class="day-label">3/4</div>
+                    </div>
+                    <div class="streak-day">
+                        <div class="day-circle active">五</div>
+                        <div class="day-label">3/5</div>
+                    </div>
+                    <div class="streak-day">
+                        <div class="day-circle active">六</div>
+                        <div class="day-label">3/6</div>
+                    </div>
+                    <div class="streak-day">
+                        <div class="day-circle active">日</div>
+                        <div class="day-label">3/7</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insights-container">
+                <div class="section-title">
+                    <div>情绪洞察</div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon" style="background-color: var(--morandiGreen);">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="insight-content">
+                        <div class="insight-title">社交活动对你的情绪有积极影响</div>
+                        <div class="insight-desc">与朋友相处时，你的情绪明显更积极</div>
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon" style="background-color: var(--morandiLavender);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="insight-content">
+                        <div class="insight-title">工作成就感是你积极情绪的主要来源</div>
+                        <div class="insight-desc">完成项目后，你的满足感明显提升</div>
+                    </div>
                 </div>
             </div>
 
@@ -179,8 +327,8 @@
                 <span>首页</span>
             </div>
             <div class="tab-item">
-                <i class="tab-icon fas fa-microphone"></i>
-                <span>录音</span>
+                <i class="tab-icon fas fa-edit"></i>
+                <span>记录</span>
             </div>
             <div class="tab-item">
                 <i class="tab-icon fas fa-chart-line"></i>
@@ -191,7 +339,98 @@
                 <span>我的</span>
             </div>
         </div>
+
+        <!-- 快速记录按钮 -->
+        <a href="record.html" class="record-button">
+            <i class="fas fa-plus"></i>
+        </a>
     </div>
+
+    <script>
+        // 与父窗口通信的函数
+        let parentWindow = null;
+        let parentOrigin = null;
+
+        // 切换到指定页面
+        function navigateTo(pageName) {
+            if (parentWindow && parentOrigin) {
+                parentWindow.postMessage({
+                    action: 'switchPage',
+                    page: pageName
+                }, parentOrigin);
+            } else {
+                console.error('父窗口通信未初始化');
+            }
+        }
+
+        // 监听来自父窗口的消息
+        window.addEventListener('message', function (event) {
+            const data = event.data;
+
+            if (data.action === 'setupCommunication') {
+                parentWindow = window.parent;
+                parentOrigin = data.parentOrigin;
+                console.log('与父窗口通信已建立');
+            }
+        });
+
+        // 添加事件监听器
+        document.addEventListener('DOMContentLoaded', function () {
+            // 快速记录按钮点击事件
+            const recordButton = document.querySelector('.record-button');
+            if (recordButton) {
+                recordButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    navigateTo('record');
+                });
+            }
+
+            // 查看全部点击事件
+            const viewAllLinks = document.querySelectorAll('.view-all');
+            viewAllLinks.forEach(function (link) {
+                link.addEventListener('click', function () {
+                    navigateTo('record');
+                });
+            });
+
+            // 底部导航栏点击事件
+            const tabItems = document.querySelectorAll('.tab-bar .tab-item');
+            tabItems.forEach(function (item, index) {
+                item.addEventListener('click', function () {
+                    switch (index) {
+                        case 0: // 首页
+                            navigateTo('home');
+                            break;
+                        case 1: // 记录
+                            navigateTo('record');
+                            break;
+                        case 2: // 报告
+                            navigateTo('weekly');
+                            break;
+                        case 3: // 我的
+                            navigateTo('profile');
+                            break;
+                    }
+                });
+            });
+
+            // 情绪卡片点击事件
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(function (card) {
+                card.addEventListener('click', function () {
+                    navigateTo('transcript');
+                });
+            });
+
+            // 周报摘要点击事件
+            const moodSummary = document.querySelector('.mood-summary');
+            if (moodSummary) {
+                moodSummary.addEventListener('click', function () {
+                    navigateTo('weekly');
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
